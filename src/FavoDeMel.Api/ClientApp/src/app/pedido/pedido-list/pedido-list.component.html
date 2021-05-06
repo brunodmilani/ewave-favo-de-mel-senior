@@ -1,0 +1,74 @@
+<div class="card">
+    <div class="card-header">
+      <div class="float-left">
+          <h4><b>Pedidos da Comanda Nº {{ comanda }}</b></h4>
+      </div>
+      <div class="text-right">
+        <button type="button" class="btn btn-primary" *ngIf="comanda" [routerLink]="['/comanda']"><i class="glyphicon glyphicon-plus"></i>Comandas</button>
+        <button type="button" class="btn btn-success" *ngIf="comanda && accountService.getRolePermission('Garcom')" [routerLink]="['/pedido/create', comanda]"><i class="glyphicon glyphicon-plus"></i> Novo Pedido</button>
+        <button type="button" class="btn btn-secondary" (click)="refresh()"><i class="glyphicon glyphicon-refresh"></i> Atualizar</button>
+      </div>
+    </div>
+    
+    <div class="card-body">
+      <div class="container" *ngIf="pedidos | async as _pedidos; else loading">
+        <div *ngIf="_pedidos.length == 0" class="alert alert-warning" role="alert">
+          Nenhuma pedido encontrado.
+        </div>
+        <table class="table table-hover" *ngIf="_pedidos.length > 0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th *ngIf="!comanda">Comanda</th>
+              <th>Descrição do Pedido</th>
+              <th>Status do Pedido</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pedido of _pedidos">
+              <td>{{ pedido.id }}</td>
+              <td *ngIf="!comanda">{{ pedido.comanda.nome }}</td>
+              <td>{{ pedido.descricao }}</td>
+              <td *ngIf="pedido.status == 1">
+                <span class="badge" style="background-color:green; color:white;">EM ANDAMENTO</span>
+              </td>
+              <td *ngIf="pedido.status == 2">
+                <span class="badge" style="background-color:blue; color:white;">FINALIZADO</span>
+              </td>
+              <td *ngIf="pedido.status == 3">
+                <span class="badge" style="background-color:red; color:white;">CANCELADO</span>
+              </td>
+              <td style="text-align: end;" *ngIf="pedido.status == 1">
+                <button type="submit" class="btn btn-info btn-sm" (click)="openModal(templateFinalizar, pedido)" *ngIf="accountService.getRolePermission('Cozinha')"><b>Finalizar</b></button>
+                <button type="submit" class="btn btn-danger btn-sm" (click)="openModal(templateCancelar, pedido)" *ngIf="accountService.getRolePermission('Garcom')"><b>Cancelar</b></button>
+              </td>
+              <td style="text-align: end;" *ngIf="pedido.status != 1">
+                <button class="btn btn-info btn-sm" *ngIf="accountService.getRolePermission('Cozinha')" disabled><b>Finalizar</b></button>
+                <button class="btn btn-danger btn-sm" *ngIf="accountService.getRolePermission('Garcom')" disabled><b>Cancelar</b></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #loading>
+        <span>Carregando pedidos...</span>
+      </ng-template>
+    </div>
+  </div>
+  
+  <ng-template #templateFinalizar>
+    <div class="modal-body text-center">
+      <p>Deseja finalizar pedido?</p>
+      <button type="button" class="btn btn-primary" (click)="finalizar()">Sim</button>
+      <button type="button" class="btn btn-secondary" (click)="decline()">Não</button>
+    </div>
+  </ng-template>
+
+  <ng-template #templateCancelar>
+    <div class="modal-body text-center">
+      <p>Deseja cancelar pedido?</p>
+      <button type="button" class="btn btn-primary" (click)="cancelar()">Sim</button>
+      <button type="button" class="btn btn-secondary" (click)="decline()">Não</button>
+    </div>
+  </ng-template>

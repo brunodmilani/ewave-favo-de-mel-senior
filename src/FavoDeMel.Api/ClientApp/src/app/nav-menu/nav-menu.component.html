@@ -1,0 +1,42 @@
+<header>
+  <nav class="navbar navbar-expand-sm navbar-toggleable-sm fixed-top navbar-dark bg-primary navbar-light border-bottom box-shadow mb-3">
+    <div class="container">
+      <a class="navbar-brand" [routerLink]="['/']"><b>FAVO DE MEL</b></a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target=".navbar-collapse"
+        aria-label="Toggle navigation"
+        [attr.aria-expanded]="isExpanded"
+        (click)="toggle()"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div
+        class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
+        [ngClass]="{ show: isExpanded }"
+      >
+        <ul class="navbar-nav flex-grow">
+          <!-- <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link navbar-brand" [routerLink]="['/pedido']">Pedidos</a>
+          </li> -->
+          <!-- <li class="nav-item" [routerLinkActive]="['link-active']">
+            <a class="nav-link navbar-brand" [routerLink]="['/comanda']">Comandas</a>
+          </li> -->
+        </ul>
+      </div>
+      <a class="navbar-brand" [routerLink]="['/']" (click)="openModal(templateSair)">
+          <i class="fa fa-fw fa-power-off"></i>Sair
+      </a>
+    </div>
+  </nav>
+</header>
+
+<ng-template #templateSair>
+  <div class="modal-body text-center">
+    <p>Deseja realmente sair?</p>
+    <a class="btn btn-primary" [routerLink]="['/login']" (click)="onSubmit()">Sim</a>
+    <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Não</button>
+  </div>
+</ng-template>

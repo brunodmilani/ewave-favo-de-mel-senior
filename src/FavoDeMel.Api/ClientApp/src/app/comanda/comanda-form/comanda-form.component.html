@@ -1,0 +1,12 @@
+<h4>{{ title }}</h4>
+<hr />
+
+<form (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="form-group">
+        <label for="nome">Nome</label>
+        <input class="form-control" type="text" name="nome" #nome="ngModel" [(ngModel)]="comanda.nome" required>
+        <span class="text-danger" *ngIf="nome.errors?.required && nome.touched">Nome é obrigatório.</span>
+    </div>
+    <button type="submit" class="btn btn-primary mr-2" [disabled]="form.form.invalid">Salvar</button>
+    <button type="button" class="btn btn-secondary" [routerLink]="['/comanda']">Cancelar</button>
+</form>

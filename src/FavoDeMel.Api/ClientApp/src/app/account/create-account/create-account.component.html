@@ -1,0 +1,35 @@
+<h2 class="text-center">Criar minha conta</h2>
+
+<form (ngSubmit)="onSubmit()" #form="ngForm">
+  <div class="form-group">
+    <label>E-mail</label>
+    <input class="form-control" type="email" name="email" id="email" email #email="ngModel" [(ngModel)]="account.email" required />
+    <span class="text-danger" *ngIf="email.errors?.required && email.touched">E-mail é obrigatório.</span>
+    <span class="text-danger" *ngIf="email.errors?.email && email.touched">E-mail inválido.</span>
+  </div>
+  <div class="form-group">
+    <label>Senha</label>
+    <input class="form-control" type="password" name="password" id="password" #password="ngModel" [(ngModel)]="account.password" minlength="6" required />
+    <span class="text-danger" *ngIf="password.errors?.required && password.touched">Senha é obrigatório.</span>
+    <span class="text-danger" *ngIf="password.errors?.minlength && password.touched">Senha deve ter pelo menos 6 caracteres.</span>
+  </div>
+  <div class="form-group">
+    <label>Confirmar Senha</label>
+    <input class="form-control" type="password" name="passwordConfirm" id="passwordConfirm" #passwordConfirm="ngModel" [(ngModel)]="account.passwordConfirm" appConfirmEqualValidator="password" minlength="6" required />
+    <span class="text-danger" *ngIf="passwordConfirm.errors?.required && passwordConfirm.touched">Confirmar Senha é obrigatório.</span>    
+    <span class="text-danger" *ngIf="passwordConfirm.errors?.notEqual && !passwordConfirm.errors?.required && passwordConfirm.touched">
+      As senhas não coincidem
+    </span>
+    <span class="text-danger" *ngIf="passwordConfirm.errors?.minlength && passwordConfirm.touched">Confirmar Senha deve ter pelo menos 6 caracteres.</span>
+  </div>
+  <div class="form-group">
+    <label for="perfil">Acesso</label>
+    <select class="form-control" id="roleId" name="role" #role="ngModel" [(ngModel)]="account.role" required>
+      <option value="">Selecione</option>
+      <option *ngFor="let role of roles" value="{{ role.normalizedName }}">{{ role.normalizedName }}</option>
+    </select>
+    <span class="text-danger" *ngIf="role.errors?.required && role.touched">Acesso é obrigatório.</span>    
+  </div>
+  <button type="submit" class="btn btn-primary btn-block" [disabled]="form.form.invalid">Criar minha conta</button>
+  <a class="btn btn-link btn-block" [routerLink]="['/login']">Voltar para Login</a>
+</form>

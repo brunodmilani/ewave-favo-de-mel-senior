@@ -1,0 +1,11 @@
+<h4><b>Novo Pedido</b></h4>
+<hr />
+<form (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="form-group">
+        <label for="descricao">Descrição</label>
+        <input class="form-control" type="text" name="descricao" #descricao="ngModel" [(ngModel)]="pedido.descricao" required>
+        <span class="text-danger" *ngIf="descricao.errors?.required && descricao.touched">Descrição é obrigatório.</span>
+    </div>
+    <button type="submit" class="btn btn-primary mr-2" [disabled]="form.form.invalid">Salvar</button>
+    <button type="button" class="btn btn-secondary" [routerLink]="['/comanda', comanda, 'pedido']">Cancelar</button>
+</form>

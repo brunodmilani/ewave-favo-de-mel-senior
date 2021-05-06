@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="row mb-3">
+    <div class="col-sm-4">
+      <button type="button" class="btn btn-success" [routerLink]="['/comanda/create']" *ngIf="accountService.getRolePermission('Garcom')"><i class="glyphicon glyphicon-plus"></i> Nova Comanda</button>
+      <button type="button" class="btn btn-secondary" (click)="refresh()"><i class="glyphicon glyphicon-refresh"></i> Atualizar</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="comandas | async as _comandas; else loading">
+    <div *ngIf="_comandas.length == 0" class="alert alert-warning col-sm-12" role="alert">
+      Nenhuma comanda encontrada.
+    </div>
+    <div class="col-sm-4" *ngFor="let comanda of _comandas">
+      <div class="card text-white bg-dark mb-3" *ngIf="!comanda.datahoraFechamento">
+        <div class="card-header">
+          <div class="float-left">
+            <b>COMANDA Nº {{ comanda.id }}</b>
+          </div>
+          <div class="text-right" *ngIf="accountService.getRolePermission('Garcom')">
+            <button type="button" class="btn btn-dark btn-sm" [routerLink]="['/comanda/edit', comanda.id]"><b>Alterar Comanda</b></button>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ comanda.nome }}</h5>
+          <h6 class="card-title"> Total em andamento: {{ comanda.totalEmAndamento }}</h6>
+          <h6 class="card-title"> Total finalizado: {{ comanda.totalFinalizado }}</h6>
+          <div class="row" *ngIf="accountService.getRolePermission('Garcom')">
+            <div class="col-sm-6">
+              <button type="button" type="submit" class="btn btn-primary btn-sm btn-max" [routerLink]="['/comanda', comanda.id, 'pedido']">Pedidos</button>
+            </div>
+            <div class="col-sm-6">
+              <button type="submit" class="btn btn-danger btn-sm btn-max" (click)="openModal(templateFechar, comanda.id)" [disabled]="comanda.totalEmAndamento > 0">Fechar Comanda</button>
+            </div>
+          </div>
+          <div class="row" *ngIf="accountService.getRolePermission('Cozinha')">
+            <div class="col-sm-12">
+              <button type="button" type="submit" class="btn btn-primary btn-sm btn-max" [routerLink]="['/comanda', comanda.id, 'pedido']">Pedidos</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card text-white bg-secondary mb-3" *ngIf="comanda.datahoraFechamento && mostraFechada">
+        <div class="card-header">
+          <div class="float-left">
+            <b>COMANDA Nº {{ comanda.id }}</b>
+          </div>
+          <div class="text-right">
+            <b>(FECHADA)</b>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ comanda.nome }}</h5>
+          <div class="row" *ngIf="accountService.getRolePermission('Garcom')">
+            <div class="col-sm-6">
+              <button type="submit" class="btn btn-primary btn-sm btn-max" disabled>Pedidos</button>
+            </div>
+            <div class="col-sm-6">
+              <button class="btn btn-danger btn-sm btn-max" disabled>Fechar Comanda</button>
+            </div>
+          </div>
+          <div class="row" *ngIf="accountService.getRolePermission('Cozinha')">
+            <div class="col-sm-12">
+              <button type="submit" class="btn btn-primary btn-sm btn-max" disabled>Pedidos</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #loading>
+    <span>Carregando comandas...</span>
+  </ng-template>
+</div>
+
+<ng-template #templateFechar>
+  <div class="modal-body text-center">
+    <p>Deseja fechar comanda?</p>
+    <button type="button" class="btn btn-primary" (click)="fecharComanda()">Sim</button>
+    <button type="button" class="btn btn-secondary" (click)="decline()">Não</button>
+  </div>
+</ng-template>
