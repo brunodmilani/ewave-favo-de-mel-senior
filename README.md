@@ -18,6 +18,8 @@
 * *Perfis com acesso para "Garçom" poderá cadastrar e cancelar pedidos*
 * *Perfis com acesso para "Cozinha" poderá apenas finalizar pedidos*
 
+* *Atualização das telas e notificação automáticas usando Pusher*
+
 
 ### Pré-requisito
 
